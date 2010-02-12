@@ -1,0 +1,90 @@
+{% extends "template.html" %}    
+
+{% block title %}Google Map{% endblock %}
+
+{% block includes %}
+    <script type="text/javascript" src="http://www.google.com/jsapi?autoload=%7B%22modules%22%3A%5B%7B%22name%22%3A%22maps%22%2C%22version%22%3A%222%22%7D%5D%7D&key=ABQIAAAAkUIiEfM2SYnpO0mGD7s2VxRMK0JKVrksL0mowNee39efPEHpdBSt45sBnLoW4T6NV_qRDCE4n9zFtw"></script>
+{% endblock %}
+
+{% block javascript %}
+
+    // Load Google Maps API
+    google.load("maps", "2");
+
+    function initialize() {
+        if (GBrowserIsCompatible()) {
+            var mapOptions = {
+                googleBarOptions : {
+                    style : "new"
+                }
+            }
+
+            var map = new GMap2(document.getElementById("map_canvas"), mapOptions);
+            //// Center Map
+            // Default to UCLA location
+            var initialLat =  34.069209;
+            var initialLng = -118.443161; 
+            var initialZoom = 14;
+		
+            // If the user is using a browser that supports the new Geolocation API by WC3, get lat and lng that way
+            if(navigator.geolocation) {
+                // handles successful attempt to get accurate user location information
+                function setUserLatLng(position) {
+                    // set centered at (position.coords.latitude, position.coords.longitude)
+                    initialLat = position.coords.latitude;
+                    initialLng = position.coords.longitude;
+                    initialZoom = 16;
+                }
+
+                // One-shot position request.
+                navigator.geolocation.getCurrentPosition(setUserLatLng);
+            }		
+            else {
+                // otherwise use google's API
+                if(google.loader.ClientLocation &&
+                google.loader.ClientLocation.address.country_code == "US" &&
+                google.loader.ClientLocation.address.region) {
+                    // If the client information is available, set center to the client locaiton
+                    initialLat = google.loader.ClientLocation.latitude;
+                    initialLng = google.loader.ClientLocation.longitude;
+                    initialZoom = 13;
+                }
+                else {
+                    // FOR DEBUGGING
+                    //alert("Client Information Not Available");
+                }
+            }
+        
+            var startingCenter = new GLatLng(initialLat, initialLng);
+            map.setCenter(startingCenter, initialZoom);  
+
+            map.setUIToDefault();
+            map.enableGoogleBar();
+ 
+            // Add markers to the map
+            {% for s in surveys %}
+                var marker = new GMarker(new GLatLng({{s.latitude}}, {{s.longitude}}));
+                GEvent.addListener(marker, "click", function() {
+                    var html = "<img src=\"http://we-tap.appspot.com/get_an_image?key={{s.key}}\" width=\"180\" height=\"130\">" +
+                               "<br />" +
+                               "<p><b>Taste: </b>{{s.q_taste}}<br/>" +
+                               "<b>Visibility: </b>{{s.q_visibility}}<br/>" +
+                               "<b>Operable: </b>{{s.q_operable}}<br/>" +
+                               "<b>Flow: </b>{{s.q_flow}}<br/>" +
+                               "<b>Wheelchair accessible: </b>{{s.q_wheel}}<br/>" +
+                               "<b>Child accessible: </b>{{s.q_child}}<br/>" +
+                               "<b>Can refill water bottle: </b>{{s.q_refill}}<br/>" +
+                               "<b>Unable to refill because: </b><br/>{{s.q_refill_aux}}<br/>" +
+                               "<b>Location: </b>{{s.q_location}}" +
+                               "</p>";
+                    map.openInfoWindowHtml(new GLatLng({{s.latitude}}, {{s.longitude}}), html);
+                });
+                map.addOverlay(marker);
+            {% endfor %}
+        }
+    }
+{% endblock %}
+ 
+{% block content %}
+    <div id="map_canvas" style="width: 980px; height: 600px" align="center"></div>
+{% endblock %}
