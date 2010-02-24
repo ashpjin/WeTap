@@ -23,7 +23,7 @@ import android.widget.Toast;
 import android.widget.CheckBox;
 import android.widget.TableRow;
 import android.app.AlertDialog;
-       
+
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -60,6 +60,7 @@ public class survey extends Activity
     private final int GB_INDEX_REFILL_AUX = 6;
     private final int GB_INDEX_VIS = 7;
     private final int GB_INDEX_LOC = 8;
+    private final int GB_INDEX_TYPE = 9;    //EDIT
 
     /** Called when the activity is first created. */
     @Override
@@ -85,22 +86,22 @@ public class survey extends Activity
         /* start location service */
         startService (new Intent(survey.this, light_loc.class));
         preferences.edit().putBoolean ("light_loc", true).commit ();
-	   
+
         //log that you created the gps listener and survey
         Log.d(TAG, "gps listener and db are started");
 
         //new Arraylist of Checkboxs - this is a temporary variable
         ArrayList<CheckBox> lcb;
 
-        //each segment of code will initiate lcb as a new arraylist and then add it to 
+        //each segment of code will initiate lcb as a new arraylist and then add it to
         //the arraylist of arraylists
         //each arraylist will have multiple "checkBox" objects and will log
         //that the checkBoxes have been added to the ArraylistArraylist
         //groups are : operable, taste, flow, access wheelchair, access child, refill, alternate
         //visibility, location
-        
+
         // add operable boxes
-        lcb = new ArrayList<CheckBox>();	
+        lcb = new ArrayList<CheckBox>();
         lcb.add( (CheckBox) findViewById(R.id.operable_functioning) );
         lcb.add( (CheckBox) findViewById(R.id.operable_broken) );
         lcb.add( (CheckBox) findViewById(R.id.operable_needs_repair) );
@@ -118,9 +119,10 @@ public class survey extends Activity
 
         // add flow boxes
         lcb = new ArrayList<CheckBox>();
-        lcb.add( (CheckBox) findViewById(R.id.flow_strong) );
-        lcb.add( (CheckBox) findViewById(R.id.flow_trickle) );
         lcb.add( (CheckBox) findViewById(R.id.flow_too_strong) );
+        lcb.add( (CheckBox) findViewById(R.id.flow_strong) );
+        lcb.add( (CheckBox) findViewById(R.id.flow_medium) );
+        lcb.add( (CheckBox) findViewById(R.id.flow_trickle) );
         lcb.add( (CheckBox) findViewById(R.id.flow_cant_answer) );
         group_box_list.add(lcb);
         Log.d(TAG, "added flow boxes");
@@ -151,6 +153,13 @@ public class survey extends Activity
         group_box_list.add(lcb);
         Log.d(TAG, "added alternate accessibility boxes");
 
+        //add type boxes  EDIT
+        lcb = new ArrayList<CheckBox>();
+        lcb.add( (CheckBox) findViewById(R.id.type_drinking) );
+        lcb.add( (CheckBox) findViewById(R.id.type_dispensing) );
+        group_box_list.add(lcb);
+        Log.d(TAG, "added type boxes");
+
         // add visibility boxes
         lcb = new ArrayList<CheckBox>();
         lcb.add( (CheckBox) findViewById(R.id.visibility_visible) );
@@ -166,7 +175,7 @@ public class survey extends Activity
         Log.d(TAG, "added location boxes");
 
         //create some buttons: submit and take picture, log the added buttons
-        
+
         // add submit button
         submit_button = (Button) findViewById(R.id.upload_button);
 
@@ -199,13 +208,6 @@ public class survey extends Activity
         // add clear history button listener
         //clear_history.setOnClickListener(clear_history_listener);
 
-        
-        //I am not really sure what this "restoring" previous state means
-        //tried filling in some checkBoxes using emulator then going back to home screen
-        //returning to the survey, it was blank until I clicked the "back" button
-        //where it then took me to the survey I had filled out earlier.
-        //Maybe this is the functionality?
-        
         // restore previous state (if available)
         if (savedInstanceState != null && savedInstanceState.getBoolean("started")) {
             for (int i = 0; i < group_box_list.size(); i++) {
@@ -243,7 +245,7 @@ public class survey extends Activity
     //this function should only be called once, the first time the options menu is displayed
     public boolean onCreateOptionsMenu (Menu m) {
         super.onCreateOptionsMenu (m);  	//calls Activity's onCreateOptions
-        
+
         //then adds more to the menu (this is what shows up when we press the middle "Menu" button
         m.add (Menu.NONE, 0, Menu.NONE, "Home").setIcon (android.R.drawable.ic_menu_revert);
         m.add (Menu.NONE, 1, Menu.NONE, "Map").setIcon (android.R.drawable.ic_menu_mapmode);
@@ -325,14 +327,14 @@ public class survey extends Activity
     public void update_checkbox_status (CheckBox cb) {
         List<CheckBox> lcb;
         boolean checked = cb.isChecked();
-        
+
         //q5_o2 is the access refill question
         //need to read up on TableRow
         if (R.id.question_5_option_2 == cb.getId()) {
             TableRow tr = (TableRow) findViewById(R.id.question_6_row);
             tr.setVisibility(checked ? View.GONE : View.VISIBLE);
-			return;	    
-            //hide the "Why couldn't you refill" question if 
+			return;
+            //hide the "Why couldn't you refill" question if
             //the user has checked the they were able to refill
            /*if you were able to refill, then the fountain cannot be broken
             		 *therefore skip the if as it is checking whether the "broken"
@@ -425,7 +427,7 @@ public class survey extends Activity
     //defines the listener for the submit button
     OnClickListener submit_button_listener = new OnClickListener() {
     	//defines a helper function that isn't really needed anywhere else
-    	
+
     	//for a given index, get the arraylist of checkboxes associated
     	//iterate through the list and if one of the boxes is checked
     	//return the index (+1) of that box, otherwise return zero
@@ -445,7 +447,7 @@ public class survey extends Activity
         public void onClick(View v) {
             Date d = new Date(); //creates new Date object
 
-            //here are a bunch of strings 
+            //here are a bunch of strings
             String q_location = "0";
             String q_visibility = "0";
             String q_operable = "0";
@@ -455,10 +457,11 @@ public class survey extends Activity
             String q_refill_aux = "0";
             String q_taste = "0";
             String q_flow = "0";
+            String q_type = "0";    //EDIT
 
-            //these strings are initialized by the helper function above. 
+            //these strings are initialized by the helper function above.
             //they are passed the index of the question (set as finals at the beginning
-            //of the file. They will be a number if a box was checked and will be "0" 
+            //of the file. They will be a number if a box was checked and will be "0"
             //if no boxes for that question were checked
             q_location = get_group_result (GB_INDEX_LOC);
             q_visibility = get_group_result (GB_INDEX_VIS);
@@ -469,11 +472,12 @@ public class survey extends Activity
             q_refill_aux = get_group_result (GB_INDEX_REFILL_AUX);
             q_taste = get_group_result (GB_INDEX_TASTE);
             q_flow = get_group_result (GB_INDEX_FLOW);
+            q_type = get_group_result (GB_INDEX_TYPE);   //EDIT
 
             /* make sure they dont submit an incomplete survey */
             if (q_location.equals("0")
                 || q_visibility.equals("0")
-                || q_operable.equals("0"))	 
+                || q_operable.equals("0"))
 			{
             	/* we can only check these three questions in such a general way because
             	 * there's no guarantee that the other questions will be there
@@ -516,7 +520,7 @@ public class survey extends Activity
             if (q_operable.equals("2")) {
                 q_refill =
                 q_refill_aux =
-                q_taste = 
+                q_taste =
                 q_flow = "0";
             }
 
@@ -535,10 +539,11 @@ public class survey extends Activity
             //open the survey_db object
             sdb.open();
             //create an entry and assign it a row id
-            long row_id = sdb.createEntry(q_location, q_visibility, q_operable,
+            long row_id = sdb.createEntry(q_location, q_visibility, q_type, q_operable,
                 q_wheel, q_child, q_refill, q_refill_aux, q_taste, q_flow,
                 longitude, latitude, time, getString(R.string.version),
-                photo_filename);
+                photo_filename);  //EDIT
+
             sdb.close();	//close the object, we've uploaded the data
 
             sdb.open();		//open the object again?
@@ -553,6 +558,7 @@ public class survey extends Activity
                                    sr.q_operable + ", " +
                                    sr.q_flow + ", " +
                                    sr.q_location + ", " +
+                                   sr.q_type + "," +  //EDIT
                                    sr.longitude + ", " +
                                    sr.latitude + ", " +
                                    sr.time + ", " +

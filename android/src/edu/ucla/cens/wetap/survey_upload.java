@@ -37,7 +37,7 @@ public class survey_upload extends Service{
 	PostThread post;
 	private static final String TAG = "SurveyUploadThread";
 
-    
+
     @Override
     public void onCreate() {
         preferences = getSharedPreferences(getString(R.string.preferences), Activity.MODE_PRIVATE);
@@ -52,20 +52,18 @@ public class survey_upload extends Service{
 		//Toast class is a predefined Android class: http://developer.android.com/reference/android/widget/Toast.html
 		//context:this, will print R.string.surveyuploadstarted, for a short length (then show the toast)
         Toast.makeText(this, R.string.surveyuploadstarted, Toast.LENGTH_SHORT).show();
-        
+
         //creat new PostThread object, and start it
     	post = new PostThread();
     	post.start();
     }
-    
-    
-    //???
+
 	@Override
 	public IBinder onBind(Intent arg0) {
 		//* TODO Auto-generated method stub
 		return null;
 	}
-	
+
     @Override
     public void onDestroy() {
     	//context this, prints R.string.surveyuploadstopped for a short length, then show the toast
@@ -75,19 +73,19 @@ public class survey_upload extends Service{
         //exit the thread
         post.exit();
     }
-	    
+
     //defining the PostThread class which is a Thread
 	public class PostThread extends Thread{
-		
+
 		public Boolean runThread = true;
-		
+
 		//definte a PicFiles class that has only function that will append .jpg to a file name
 		private class PicFiles implements FilenameFilter{
 			public boolean accept(File file, String name) {
 				return (name.endsWith(".jpg"));
-			}	
+			}
 		}
-		
+
 		public void run(){
 
 			try {
@@ -99,11 +97,11 @@ public class survey_upload extends Service{
 
 					//*list all trace files
 			        sdb.open();
-			        //create a new arraylist of survey_db_row items by getting all the completed entries from 
+			        //create a new arraylist of survey_db_row items by getting all the completed entries from
 			        //the survey_db object (look in survey_db.java)
 					ArrayList<survey_db_row> sr_list = sdb.fetch_all_completed_entries();
 					sdb.close();
-					
+
 					//some logs: arraylist size, uploading url, version(?)
 	                Log.d(TAG, "Points to submit: " + Integer.toString(sr_list.size()));
                     Log.d(TAG, "uploading to: " + getString(R.string.surveyuploadurl));
@@ -112,9 +110,9 @@ public class survey_upload extends Service{
                     //iterate through the entire arraylist of survey_upload_row items
 					for (int i=0; i < sr_list.size(); i++)
 					{
-						survey_db_row sr = sr_list.get(i); 
+						survey_db_row sr = sr_list.get(i);
 						File file = null;
-						
+
 						//check if there is a photo attached to this survey. If so, make the photoname a string
 						//and open it: set to file. Otherwise just log that there is no photo
 						if ((sr.photo_filename != null) && (!sr.photo_filename.toString().equals(""))) {
@@ -129,8 +127,8 @@ public class survey_upload extends Service{
 						{
 							//doPost is written function - defined below
 							//takes all the strings as arguments and returns a boolean
-							if(doPost(getString(R.string.surveyuploadurl),
-                                      sr.q_taste, sr.q_visibility,
+	/*Problem?*/			if(doPost(getString(R.string.surveyuploadurl),
+                                      sr.q_taste, sr.q_visibility, sr.q_type, //EDIT
                                       sr.q_operable, sr.q_flow, sr.q_wheel,
                                       sr.q_child, sr.q_refill, sr.q_refill_aux,
                                       sr.q_location, sr.longitude, sr.latitude,
@@ -147,7 +145,7 @@ public class survey_upload extends Service{
 						        sdb.close();
 							}
 						}
-						catch (IOException e) 
+						catch (IOException e)
 						{
 							//* TODO Auto-generated catch block
 							Log.d(TAG, "threw an IOException for sending file.");
@@ -156,26 +154,26 @@ public class survey_upload extends Service{
 						//sleep for a short while before attempting to get the next survey row item
 						this.sleep(1000);
 					}
-				} 
+				}
 			}
-			catch (InterruptedException e) 
+			catch (InterruptedException e)
 			{
 				//* TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}//ends the run() function
-	
+
 		public void exit() //changes variable to false, will Thread will take care of exitting the thread
 		{
 			runThread = false;
 		}
-		
+
 		/*
 		 * this uses java.net.HttpURLConnection another way to do it is to use apache HttpPost
 		 * but the API seems a bit complicated. If you figure out how to use it and its more
 		 * efficient then let me know (vids@ucla.edu) Thanks.
 		 */
-	    private boolean doPost(String url, String q_taste, String q_visibility,
+	    private boolean doPost(String url, String q_taste, String q_visibility, String q_type, //EDIT
                                String q_operable, String q_flow,
                                String q_wheel, String q_child, String q_refill,
                                String q_refill_aux, String q_location,
@@ -185,17 +183,17 @@ public class survey_upload extends Service{
 	    {
 	    	Log.d(TAG, "Attempting to send file:" + photo_filename);
 	    	Log.d(TAG, "Trying to post: "+url.toString()+" "+photo_filename.toString() + " "+ longitude.toString() + " ...");
-	    	
-	    	HttpClient httpClient = authenticate.httpClient; //??
-	    	HttpPost request = new HttpPost(url.toString()); //?? - giving the url as a string as argument
-	    	
+
+	    	HttpClient httpClient = authenticate.httpClient;
+	    	HttpPost request = new HttpPost(url.toString()); //giving the url as a string as argument
+
 	    	Log.d(TAG, "After Request");
-	    	
-	    	//where is this class defined (not in SDK)
+
 	    	//add all the arguments as strings with descriptors as new parts to the entity
 	    	MultipartEntity entity = new MultipartEntity();
 	    	entity.addPart("q_taste", new StringBody(q_taste.toString()));
 	    	entity.addPart("q_visibility", new StringBody(q_visibility.toString()));
+            entity.addPart("q_type", new StringBody(q_type.toString()));  //EDIT
             entity.addPart("q_operable", new StringBody(q_operable.toString()));
             entity.addPart("q_flow", new StringBody(q_flow.toString()));
             entity.addPart("q_wheel", new StringBody(q_wheel.toString()));
@@ -208,7 +206,7 @@ public class survey_upload extends Service{
             entity.addPart("time", new StringBody(time.toString()));
             entity.addPart("version", new StringBody(version.toString()));
 
-	    	
+
 	    	Log.d(TAG, "After adding string");
 
 	    	//add the photo file name to the entity as: string if no name exists, file if exists
@@ -221,22 +219,22 @@ public class survey_upload extends Service{
     	    	File file = new File(photo_filename.toString());
 	        	entity.addPart("file", new FileBody(file));
             }
-	    	
+
 	    	Log.d(TAG, "After adding file");
-	    	
-	    	//what is "request"? - this part will require reading up about java.net.HttpURLConnection
+
+	    	//requires reading up about java.net.HttpURLConnection
 	    	request.setEntity(entity);
-	    	
+
 	    	Log.d(TAG, "After setting entity");
-	    	
+
 	    	HttpResponse response = httpClient.execute(request);
-	    	
+
 	    	Log.d(TAG, "Doing HTTP Reqest");
 
 	    	int status = response.getStatusLine().getStatusCode();
 	    	//*Log.d(TAG, generateString(response.getEntity().getContent()));
 	    	Log.d(TAG, "Status Message: "+Integer.toString(status));
-	    	
+
 	    	if(status == HttpStatus.SC_OK)
 	    	{
 		    	Log.d(TAG, "Sent file.");
@@ -247,15 +245,15 @@ public class survey_upload extends Service{
 		    	Log.d(TAG, "File not sent.");
 	    		return false;
 	    	}
-	    	
+
 	    }
-	    
+
 	    public String generateString(InputStream stream) {
 	    	//create some new objects (defined in SDK)
   	      InputStreamReader reader = new InputStreamReader(stream);
   	       BufferedReader buffer = new BufferedReader(reader);
   	       StringBuilder sb = new StringBuilder(); //new Stringbuilder with inital size of 16 char (?)
-  	    
+
   	       try {
   	           String cur;
   	           //read lines until there are no more (a.k.a. the null case)
@@ -267,20 +265,20 @@ public class survey_upload extends Service{
   	           //* TODO Auto-generated catch block
   	           e.printStackTrace();
   	       }
-  	    
+
   	       try {
   	           stream.close();	//try to close the InputStreamReader
   	       } catch (IOException e) {
   	           //* TODO Auto-generated catch block
   	           e.printStackTrace();
   	       }
-  	       return sb.toString(); //returns contents of sb - all the lines and newlines 
+  	       return sb.toString(); //returns contents of sb - all the lines and newlines
   	       						 //appended together
 	    }
-	    
-	    
+
+
          /*
-          * Read file into String. 
+          * Read file into String.
           */
          private String readFileAsString(File file) throws java.io.IOException{
              StringBuilder fileData = new StringBuilder(1024); //constructed with 1024 char capacity
@@ -293,10 +291,6 @@ public class survey_upload extends Service{
              }
              reader.close();
              return fileData.toString();
-         }	
-	     //^don't really understand how this is working because it doesn't look like it should
-         //find where it is called.
-	    
-	}
-
+         }
+    }
 }

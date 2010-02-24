@@ -20,7 +20,8 @@
     <string name="question_6_label">Why couldn't you refill?</string>
     <string name="question_6_option_0">No Room</string>
     <string name="question_6_option_1">Water Flow</string>
-    <string name="question_6_option_2">Other</string>
+    <string name="question_6_option_2">Partial Refill Only</string>
+    <string name="question_6_option_3">Other</string>
 
     <string name="about_content">WeTap is a participatory sensing campaign geared towards identifying, describing and mapping public drinking fountains. With this Android application you can view a map of nearby drinking water sources as well as rate specific fountains and assist in helping this vital public infrastructure improve. The goal of this application is to support those who have said no to bottled water and help others join the cause. Save money, reduce single use plastic, tell a friend!</string>
 
