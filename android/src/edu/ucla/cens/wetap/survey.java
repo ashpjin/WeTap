@@ -40,7 +40,7 @@ import edu.ucla.cens.wetap.survey_db.survey_db_row;
 
 public class survey extends Activity
 {
-	//a whole bunch of private members
+    //a whole bunch of private members
     private String TAG = "Survey";
     private ArrayList<ArrayList<CheckBox>> group_box_list = new ArrayList<ArrayList<CheckBox>>();
     private Button take_picture;
@@ -66,9 +66,9 @@ public class survey extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-    	//calls Activity's create with the passed Bundle savedInstanceState
+        //calls Activity's create with the passed Bundle savedInstanceState
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.survey);	//creates a window to view the user interface (the survey one)
+        setContentView(R.layout.survey);    //creates a window to view the user interface (the survey one)
 
         //sets the member "preferences" to the return. preferences is a SharedPreferences object
         preferences = getSharedPreferences(getString(R.string.preferences), Activity.MODE_PRIVATE);
@@ -119,11 +119,11 @@ public class survey extends Activity
 
         // add flow boxes
         lcb = new ArrayList<CheckBox>();
-        lcb.add( (CheckBox) findViewById(R.id.flow_too_strong) );
         lcb.add( (CheckBox) findViewById(R.id.flow_strong) );
-        lcb.add( (CheckBox) findViewById(R.id.flow_medium) );
         lcb.add( (CheckBox) findViewById(R.id.flow_trickle) );
+        lcb.add( (CheckBox) findViewById(R.id.flow_too_strong) );
         lcb.add( (CheckBox) findViewById(R.id.flow_cant_answer) );
+        lcb.add( (CheckBox) findViewById(R.id.flow_medium) );
         group_box_list.add(lcb);
         Log.d(TAG, "added flow boxes");
 
@@ -149,6 +149,7 @@ public class survey extends Activity
         lcb = new ArrayList<CheckBox>();
         lcb.add( (CheckBox) findViewById(R.id.question_6_option_0) );
         lcb.add( (CheckBox) findViewById(R.id.question_6_option_1) );
+        lcb.add( (CheckBox) findViewById(R.id.question_6_option_3) );
         lcb.add( (CheckBox) findViewById(R.id.question_6_option_2) );
         group_box_list.add(lcb);
         Log.d(TAG, "added alternate accessibility boxes");
@@ -190,11 +191,14 @@ public class survey extends Activity
         image_thumbnail = (ImageView) findViewById(R.id.thumbnail);
 
         // add check box listeners
-        for (int j = 0; j < group_box_list.size(); j++) {  //get an arraylist from the arraylist of arraylists
+      //get an arraylist from the arraylist of arraylists
+        for (int j = 0; j < group_box_list.size(); j++) {
             lcb = group_box_list.get(j);
-            for (int i = 0; i < lcb.size(); i++) {   //iterate through each individual arraylist
+            //iterate through each individual arraylist
+            for (int i = 0; i < lcb.size(); i++) {
                 CheckBox cb = (CheckBox) lcb.get(i);
-                cb.setOnClickListener(check_box_listener); 	//create listeners for all checkboxs
+                //create listeners for all checkboxs
+                cb.setOnClickListener(check_box_listener);
                 //check_box_listener is defined later on in this file
             }
         }
@@ -244,7 +248,8 @@ public class survey extends Activity
     @Override
     //this function should only be called once, the first time the options menu is displayed
     public boolean onCreateOptionsMenu (Menu m) {
-        super.onCreateOptionsMenu (m);  	//calls Activity's onCreateOptions
+        //calls Activity's onCreateOptions
+        super.onCreateOptionsMenu (m);
 
         //then adds more to the menu (this is what shows up when we press the middle "Menu" button
         m.add (Menu.NONE, 0, Menu.NONE, "Home").setIcon (android.R.drawable.ic_menu_revert);
@@ -257,9 +262,12 @@ public class survey extends Activity
     @Override
     //this function is called when a menu item has been selected
     public boolean onOptionsItemSelected (MenuItem index) {
-        Context ctx = survey.this;	//will tell us which button was pressed
-        Intent i;					//initializes new Intent
-        switch (index.getItemId()) {	//display these pages if they are clicked
+        //will tell us which button was pressed
+        Context ctx = survey.this;
+        //initializes new Intent
+        Intent i;
+        //display these pages if they are clicked
+        switch (index.getItemId()) {
             case 0:
                 i = new Intent (ctx, home.class);
                 break;
@@ -275,7 +283,8 @@ public class survey extends Activity
             default:
                 return false;
         }
-        ctx.startActivity (i);     //start the Activity and finish(?) the survey
+        //start the Activity and finish(?) the survey
+        ctx.startActivity (i);
         this.finish();
         return true;
     }
@@ -285,9 +294,10 @@ public class survey extends Activity
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         //display this popup message to the user
         builder.setMessage("Yout GPS seems to be disabled, You need GPS to run this application. do you want to enable it?")
-               .setCancelable(false)	//you cannot "cancel" this message
+               //you cannot "cancel" this message
+               .setCancelable(false)
                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            	   //if "yes" enable, then enable the gps by doing something
+                   //if "yes" enable, then enable the gps by doing something
                     public void onClick(final DialogInterface dialog, final int id) {
                         survey.this.startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), 3);
                     }
@@ -295,11 +305,13 @@ public class survey extends Activity
                 //if no they do not want to enable the gps
                .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int id) {
-                        survey.this.finish();	//finish the survey
+                        //finish the survey
+                        survey.this.finish();
                     }
                 });
         final AlertDialog alert = builder.create();
-        alert.show();		//now show the alert
+        //now show the alert
+        alert.show();
     }
 
     // if this activity gets killed for any reason, save the status of the
@@ -333,18 +345,18 @@ public class survey extends Activity
         if (R.id.question_5_option_2 == cb.getId()) {
             TableRow tr = (TableRow) findViewById(R.id.question_6_row);
             tr.setVisibility(checked ? View.GONE : View.VISIBLE);
-			return;
+            return;
             //hide the "Why couldn't you refill" question if
             //the user has checked the they were able to refill
            /*if you were able to refill, then the fountain cannot be broken
-            		 *therefore skip the if as it is checking whether the "broken"
-            		 *option was checked*/
+                     *therefore skip the if as it is checking whether the "broken"
+                     *option was checked*/
         }
 
         //check to see if the passed checkbox was the "broken" checkbox
         if (R.id.operable_broken == cb.getId()) {
-        	//set a bunch of other questions to gone or visible depending on the answer
-        	//to this specific question
+            //set a bunch of other questions to gone or visible depending on the answer
+            //to this specific question
             View v = findViewById(R.id.taste_row);
             v.setVisibility(checked ? View.GONE : View.VISIBLE);
 
@@ -370,8 +382,10 @@ public class survey extends Activity
 
         //Recall: group_box_list is the arraylist of arraylists of checkboxes
         for (int i = 0; i < group_box_list.size(); i++) {
-            lcb = group_box_list.get(i);	//get an Arraylist of questions
-            int index = lcb.indexOf(cb);	//cb is the passed checkbox to this function
+            //get an Arraylist of questions
+            lcb = group_box_list.get(i);
+            //cb is the passed checkbox to this function
+            int index = lcb.indexOf(cb);
 
             // continue on if the check box wasn't found in this checkbox group
             if(-1 == index) {
@@ -380,13 +394,15 @@ public class survey extends Activity
 
             // switch all of the other checkboxes in this group off
             for (i = 0; i < lcb.size(); i++) {
-                cb = (CheckBox) lcb.get(i);		//now we overrite cb with the checkbox we
-                								//are looking at. this is ok because we only
-                								//need the index of cb
+                cb = (CheckBox) lcb.get(i);
+                //now we overrite cb with the checkbox we
+                //are looking at. this is ok because we only
+                //need the index of cb
                 if (i != index
                         && cb.isChecked())
                 {
-                    cb.setChecked(false);		//uncheck the box
+                    //uncheck the box
+                    cb.setChecked(false);
                     checked = false;
                     //if the box we just unchecked was the "broken" checkbox then
                     //we will restore the other questions because now they may apply
@@ -426,12 +442,12 @@ public class survey extends Activity
 
     //defines the listener for the submit button
     OnClickListener submit_button_listener = new OnClickListener() {
-    	//defines a helper function that isn't really needed anywhere else
+        //defines a helper function that isn't really needed anywhere else
 
-    	//for a given index, get the arraylist of checkboxes associated
-    	//iterate through the list and if one of the boxes is checked
-    	//return the index (+1) of that box, otherwise return zero
-    	//zero indicates no boxes in that list were checked
+        //for a given index, get the arraylist of checkboxes associated
+        //iterate through the list and if one of the boxes is checked
+        //return the index (+1) of that box, otherwise return zero
+        //zero indicates no boxes in that list were checked
         private String get_group_result (int index) {
             List<CheckBox> lcb = group_box_list.get(index);
             for (int i = 0; i < lcb.size(); i++) {
@@ -477,11 +493,12 @@ public class survey extends Activity
             /* make sure they dont submit an incomplete survey */
             if (q_location.equals("0")
                 || q_visibility.equals("0")
-                || q_operable.equals("0"))
-			{
-            	/* we can only check these three questions in such a general way because
-            	 * there's no guarantee that the other questions will be there
-            	 * have to do the rest on a case by case basis*/
+                || q_operable.equals("0")
+                || q_type.equals("0"))
+            {
+                /* we can only check these four questions in such a general way because
+                 * there's no guarantee that the other questions will be there
+                 * have to do the rest on a case by case basis*/
             //show a warning
                 Toast
                 .makeText (survey.this,
@@ -491,7 +508,7 @@ public class survey extends Activity
                 return;
             }
 
-            if (!q_operable.equals("2")	//other cases
+            if (!q_operable.equals("2") //other cases
                 && !q_refill.equals("1")
                 && q_refill_aux.equals("0"))
             {
@@ -533,8 +550,10 @@ public class survey extends Activity
             //initialize long and lat strings to empty
             String longitude = "";
             String latitude = "";
-            String time = Long.toString(d.getTime()); //get the time (as String)
-            String photo_filename = filename;		//get the photo file
+            //get the time (as String)
+            String time = Long.toString(d.getTime());
+            //get the photo file
+            String photo_filename = filename;
 
             //open the survey_db object
             sdb.open();
@@ -544,12 +563,14 @@ public class survey extends Activity
                 longitude, latitude, time, getString(R.string.version),
                 photo_filename);  //EDIT
 
-            sdb.close();	//close the object, we've uploaded the data
+            //close the object, we've uploaded the data
+            sdb.close();
 
-            sdb.open();		//open the object again?
+            //open the object again?
+            sdb.open();
             //get the entry that we just submitted
             survey_db_row sr = sdb.fetchEntry(row_id);
-            sdb.close();	//close the object again
+            sdb.close();    //close the object again
 
             //log the results that we submitted
             Log.d("SUBMIT SURVEY", Long.toString(sr.row_id) + ", " +
@@ -580,7 +601,8 @@ public class survey extends Activity
 
     //this defines the listener for the take picture button
     OnClickListener take_picture_listener = new OnClickListener() {
-        public void onClick(View v) {		//start up the camera if clicked
+        //start up the camera if clicked
+        public void onClick(View v) {
             Intent photo_intent = new Intent(survey.this, photo.class);
             startActivityForResult(photo_intent, 0);
         }

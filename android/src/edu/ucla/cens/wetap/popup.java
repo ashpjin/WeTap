@@ -53,7 +53,7 @@ public class popup extends Activity {
         String req_key = perf.getString("site_key", "");
 
         String flow = "Not applicable";
-        String photo = ""; 
+        String photo = "";
         String operable = "Not rated";
         String version = "Not rated";
         String wheel = "No";
@@ -127,7 +127,7 @@ public class popup extends Activity {
 
         tv = (TextView) findViewById (R.id.flow_score);
         tv.setText (decode_survey("flow", flow));
-        
+
         tv = (TextView) findViewById (R.id.wheel_score);
         tv.setText (decode_survey("binary", wheel));
 
@@ -178,6 +178,8 @@ public class popup extends Activity {
                 case 1: return "Strong";
                 case 2: return "Trickle";
                 case 3: return "Too strong";
+                case 4: return "Can't answer";
+                case 5: return "Medium";
             }
         } else if (q.equals("binary")) {
             switch (k) {
@@ -190,6 +192,7 @@ public class popup extends Activity {
                 case 1: return "No room";
                 case 2: return "Not enough water flow.";
                 case 3: return "Other";
+                case 4: return "Partial refill only";
             }
         } else if (q.equals("location")) {
             switch (k) {

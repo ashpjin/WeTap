@@ -267,7 +267,6 @@
                 android:layout_toRightOf="@id/taste_bad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="10sp"
                 android:text="Can't answer"/>
         </RelativeLayout>
     </TableRow>
@@ -310,11 +309,11 @@
                 android:layout_below="@id/flow_too_strong"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingRight="10sp"
                 android:text="Trickle"/>
             <CheckBox android:id="@+id/flow_cant_answer"
                 android:layout_alignTop="@id/flow_trickle"
                 android:layout_toRightOf="@id/flow_trickle"
-                android:layout_below="@id/flow_strong"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Can't answer"/>

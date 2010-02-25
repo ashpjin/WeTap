@@ -45,17 +45,17 @@ public class authenticate extends Activity implements Runnable {
     private String pass;
     private boolean save_login;
 
-	private static final String TAG = "Authentication";
+    private static final String TAG = "Authentication";
     private static final int DIALOG_PROGRESS = 1;
 
-	public static HttpClient httpClient;
+    public static HttpClient httpClient;
     private SharedPreferences preferences;
     private String authToken = "";
     private ProgressDialog mProgressDialog;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.authenticate);
         et_email = (EditText) findViewById(R.id.email);
         et_pass = (EditText) findViewById(R.id.password);
@@ -68,7 +68,7 @@ public class authenticate extends Activity implements Runnable {
             showDialog(DIALOG_PROGRESS);
         }
 
-        
+
         Log.d(TAG, "started authenticate intent");
 
         preferences = this.getSharedPreferences(getString(R.string.preferences), Activity.MODE_PRIVATE);
@@ -104,7 +104,7 @@ public class authenticate extends Activity implements Runnable {
                 thread.start();
             }
         });
-	}
+    }
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -172,12 +172,12 @@ public class authenticate extends Activity implements Runnable {
             return false;
         }
         try {
-            
+
             HttpResponse response = httpClient.execute(request);
             Log.d(TAG, "Doing Google HTTPS Request");
             int status = response.getStatusLine().getStatusCode();
             if (HttpStatus.SC_OK != status) {
-                Log.d(TAG, "got status: " + status); 
+                Log.d(TAG, "got status: " + status);
                 Log.d(TAG, generateString(response.getEntity().getContent()));
                 return false;
             }

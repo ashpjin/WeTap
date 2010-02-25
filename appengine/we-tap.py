@@ -56,6 +56,7 @@ def decode_survey(q, v):
                     '2': lambda: "Trickle",
                     '3': lambda: "Too strong",
                     '4': lambda: "Can't answer"
+                    '5': lambda: "Medium"
                 }[v](),
             'wheel':
                 lambda v: {
@@ -78,6 +79,7 @@ def decode_survey(q, v):
                     '1': lambda: "No room",
                     '2': lambda: "Not enough water flow",
                     '3': lambda: "Other"
+                    '4': lambda: "Partial refill only"
                 }[v](),
             'location':
                 lambda v: {
