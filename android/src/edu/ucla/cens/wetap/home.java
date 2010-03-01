@@ -24,6 +24,7 @@ public class home extends Activity {
 
         m.add (Menu.NONE, 0, Menu.NONE, "About").setIcon (android.R.drawable.ic_menu_info_details);
         m.add (Menu.NONE, 1, Menu.NONE, "Instructions").setIcon (android.R.drawable.ic_menu_help);
+        m.add (Menu.NONE, 2, Menu.NONE, "Statistics").setIcon(android.R.drawable.ic_menu_sort_by_size);
         return true;
     }
 
@@ -37,6 +38,9 @@ public class home extends Activity {
                 break;
             case 1:
                 i = new Intent (ctx, instructions.class);
+                break;
+            case 2:
+                i = new Intent (ctx, statistics.class);
                 break;
             default:
                 return false;

@@ -385,4 +385,24 @@ public class survey_db {
         int ret = db.update (DATABASE_TABLE, values, where_clause, null);
         return ret; //returns number of rows affected
     }
+
+    //returns the number of gpsless entries in the survey_db - for use in statistics.java
+    public int count_gpsless_entries()
+    {
+        String where_clause = KEY_LONGITUDE + "=\"\"" + " AND " + KEY_LATITUDE + "=\"\"";
+        Cursor c = db.rawQuery("SELECT " + KEY_LONGITUDE + ", " + KEY_LATITUDE  //PROBLEM
+                                + " FROM " + DATABASE_TABLE
+                                + " WHERE " + where_clause, null);
+        return c.getCount();
+    }
+
+    //returnsthe number of gpssed entries in the survey db - for use in statistics.java
+    public int count_gpssed_entries()
+    {
+        String where_clause = KEY_LONGITUDE + "!=\"\"" + " AND " + KEY_LATITUDE + "!=\"\"";
+        Cursor c = db.rawQuery("SELECT " + KEY_LONGITUDE + ", " + KEY_LATITUDE
+                                + " FROM " + DATABASE_TABLE
+                                + " WHERE " + where_clause, null);
+        return c.getCount();
+    }
 }

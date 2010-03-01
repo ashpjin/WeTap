@@ -256,6 +256,7 @@ public class survey extends Activity
         m.add (Menu.NONE, 1, Menu.NONE, "Map").setIcon (android.R.drawable.ic_menu_mapmode);
         m.add (Menu.NONE, 2, Menu.NONE, "About").setIcon (android.R.drawable.ic_menu_info_details);
         m.add (Menu.NONE, 3, Menu.NONE, "Instructions").setIcon (android.R.drawable.ic_menu_help);
+        m.add (Menu.NONE, 4, Menu.NONE, "Statistics").setIcon(android.R.drawable.ic_menu_sort_by_size);
         return true;
     }
 
@@ -279,6 +280,9 @@ public class survey extends Activity
                 break;
             case 3:
                 i = new Intent (ctx, instructions.class);
+                break;
+            case 4:
+                i = new Intent (ctx,statistics.class);
                 break;
             default:
                 return false;

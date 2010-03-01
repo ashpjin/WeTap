@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="@drawable/background"
+  >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background">
+
+    <ImageView android:id="@+id/logo" android:layout_width="fill_parent" android:layout_height="wrap_content" android:src="@drawable/headersmall" android:paddingBottom="20px"/>
+
+    <TextView
+        android:id="@+id/without_gps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_below="@id/logo"
+        android:text="Waiting uploads without GPS: " />
+    <TextView android:id="@+id/num_without"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image"
+        android:layout_alignBaseline="@id/without_gps"
+        android:layout_toRightOf="@id/without_gps"
+        android:textSize="20sp"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/with_gps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_below="@id/without_gps"
+        android:text="Waiting uploads with GPS: " />
+    <TextView android:id="@+id/num_with"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/with_gps"
+        android:layout_toRightOf="@id/with_gps"
+        android:textSize="20sp"
+        android:text="" />
+
+</RelativeLayout>
+</ScrollView>
