@@ -53,7 +53,7 @@ public class survey_upload extends Service{
         //context:this, will print R.string.surveyuploadstarted, for a short length (then show the toast)
         Toast.makeText(this, R.string.surveyuploadstarted, Toast.LENGTH_SHORT).show();
 
-        //creat new PostThread object, and start it
+        //create new PostThread object, and start it
         post = new PostThread();
         post.start();
     }
