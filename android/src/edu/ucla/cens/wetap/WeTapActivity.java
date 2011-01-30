@@ -9,7 +9,7 @@ import android.util.Log;
 public class WeTapActivity extends Activity {
 
     /* Fields */
-    private final int SPLASH_DISPLAY_LENGHT = 1;
+    private final int SPLASH_DISPLAY_LENGTH = 1;
     private String TAG = "SPLASH";
 
     /* Called when the activity is first created. */
@@ -31,7 +31,7 @@ public class WeTapActivity extends Activity {
                     Log.d(TAG, "started authentication intent");
                     WeTapActivity.this.finish();
                 }
-            }, SPLASH_DISPLAY_LENGHT);
+            }, SPLASH_DISPLAY_LENGTH);
     }
 
     @Override

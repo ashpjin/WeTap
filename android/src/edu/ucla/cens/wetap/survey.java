@@ -559,6 +559,8 @@ public class survey extends Activity
             //get the photo file
             String photo_filename = filename;
 
+            Log.d("SUBMIT SURVEY", "opening sdb object");
+
             //open the survey_db object
             sdb.open();
             //create an entry and assign it a row id
@@ -570,7 +572,7 @@ public class survey extends Activity
             //close the object, we've uploaded the data
             sdb.close();
 
-            //open the object again?
+            //open the object again. is this necessary?
             sdb.open();
             //get the entry that we just submitted
             survey_db_row sr = sdb.fetchEntry(row_id);

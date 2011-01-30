@@ -393,7 +393,9 @@ public class survey_db {
         Cursor c = db.rawQuery("SELECT " + KEY_LONGITUDE + ", " + KEY_LATITUDE  //PROBLEM
                                 + " FROM " + DATABASE_TABLE
                                 + " WHERE " + where_clause, null);
-        return c.getCount();
+        int num = c.getCount();
+        c.close();
+        return num;
     }
 
     //returnsthe number of gpssed entries in the survey db - for use in statistics.java
@@ -403,6 +405,8 @@ public class survey_db {
         Cursor c = db.rawQuery("SELECT " + KEY_LONGITUDE + ", " + KEY_LATITUDE
                                 + " FROM " + DATABASE_TABLE
                                 + " WHERE " + where_clause, null);
-        return c.getCount();
+        int num = c.getCount();
+        c.close();
+        return num;
     }
 }

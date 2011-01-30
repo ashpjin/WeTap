@@ -23,6 +23,7 @@ public class about extends Activity {
         m.add (Menu.NONE, 1, Menu.NONE, "Survey").setIcon (android.R.drawable.ic_menu_agenda);
         m.add (Menu.NONE, 2, Menu.NONE, "Map").setIcon (android.R.drawable.ic_menu_mapmode);
         m.add (Menu.NONE, 3, Menu.NONE, "Instructions").setIcon (android.R.drawable.ic_menu_help);
+        m.add (Menu.NONE, 4, Menu.NONE, "Statistics").setIcon(android.R.drawable.ic_menu_sort_by_size);
         return true;
     }
 

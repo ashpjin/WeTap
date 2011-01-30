@@ -141,6 +141,7 @@ public class map extends MapActivity {
         m.add (Menu.NONE, 1, Menu.NONE, "Survey").setIcon (android.R.drawable.ic_menu_agenda);
         m.add (Menu.NONE, 2, Menu.NONE, "About").setIcon (android.R.drawable.ic_menu_info_details);
         m.add (Menu.NONE, 3, Menu.NONE, "Instructions").setIcon (android.R.drawable.ic_menu_help);
+        m.add (Menu.NONE, 4, Menu.NONE, "Statistics").setIcon(android.R.drawable.ic_menu_sort_by_size);
         return true;
     }
 
@@ -157,7 +158,7 @@ public class map extends MapActivity {
                 break;
             case 2:
                 i = new Intent (ctx, about.class);
-                break;  
+                break;
             case 3:
                 i = new Intent (ctx, instructions.class);
                 break;
@@ -179,7 +180,7 @@ public class map extends MapActivity {
         private final int long_press_delay = 1000; // milliseconds
         private final int max_dx = 15;
         private final int max_dy = 15;
-    
+
         MySiteOverlay(Drawable defaultMarker) {
             super (boundCenterBottom(defaultMarker));
 
@@ -302,17 +303,17 @@ public class map extends MapActivity {
         }
 
 
-    
+
         public void addOverlay (OverlayItem overlay) {
             overlay_items.add (overlay);
             populate();
         }
-    
+
         @Override
         protected OverlayItem createItem (int i) {
             return overlay_items.get(i);
         }
-    
+
         @Override
         public int size () {
             return overlay_items.size();

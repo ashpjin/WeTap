@@ -8,9 +8,9 @@
     <string name="surveyuploadstarted">Surveys are being uploaded.</string>
     <string name="surveyuploadstopped">Surveys are not being uploaded.</string>
 
-    <string name="baseurl">http://we-tap.appspot.com</string>
-    <string name="loginurl">http://we-tap.appspot.com/_ah/login</string>
-    <string name="surveyuploadurl">"http://we-tap.appspot.com/upload_survey"</string>
+    <string name="baseurl">http://wetaptest.appspot.com</string>
+    <string name="loginurl">http://wetaptest.appspot.com/_ah/login</string>
+    <string name="surveyuploadurl">"http://wetaptest.appspot.com/upload_survey"</string>
 
     <string name="question_5_label">Access:</string>
     <string name="question_5_option_0">Wheelchair accessible</string>

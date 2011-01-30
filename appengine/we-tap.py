@@ -56,6 +56,7 @@ def decode_survey(q, v):
                     '2': lambda: "Trickle",
                     '3': lambda: "Too strong",
                     '4': lambda: "Can't answer"
+                    '5': lambda: "Medium"
                 }[v](),
             'wheel':
                 lambda v: {
@@ -78,11 +79,17 @@ def decode_survey(q, v):
                     '1': lambda: "No room",
                     '2': lambda: "Not enough water flow",
                     '3': lambda: "Other"
+                    '4': lambda: "Partial refill only"
                 }[v](),
             'location':
                 lambda v: {
                     '1': lambda: "Indoor",
                     '2': lambda: "Outdoors"
+                }[v]()
+            'type':
+                lambda v: {
+                    '1': lambda: "Drinking",
+                    '2': lambda: "Dispensing"
                 }[v]()
         }[q](v)
         return ret
@@ -139,6 +146,7 @@ class UploadSurvey(webapp.RequestHandler):
 
         s.q_taste = self.request.get('q_taste')
         s.q_visibility = self.request.get('q_visibility')
+        s.q_type = self.request.get('q_type')
         s.q_operable = self.request.get('q_operable')
         s.q_flow = self.request.get('q_flow')
         s.q_wheel = self.request.get('q_wheel')
@@ -169,6 +177,7 @@ class UploadSurveyMock(webapp.RequestHandler):
             s.user = users.get_current_user()
         s.q_taste = '0'
         s.q_visibility = '1'
+        s.q_type = '1'
         s.q_operable = '1'
         s.q_flow = '0'
         s.q_wheel = '0'
@@ -227,6 +236,7 @@ class GetPointData(webapp.RequestHandler):
             e['refill'] = decode_survey("refill", s.q_refill)
             e['refill_aux'] = decode_survey("refill_aux", s.q_refill_aux)
             e['location'] = decode_survey("location", s.q_location)
+            e['type'] = decode_survey("type", s.q_type)
             
             # use list instead to make it easier to parse in JavaScript
             d.append(e);
@@ -260,6 +270,7 @@ class GetAPoint(webapp.RequestHandler):
                     e['q_visibility'] = s.q_visibility
                     e['q_location'] = s.q_location
                     e['version'] = s.version
+                    e['type'] = s.q_type
                     self.response.out.write(json.dumps(e))
                     return
             except (db.Error):
